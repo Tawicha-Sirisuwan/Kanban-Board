@@ -1,0 +1,131 @@
+/* รีเซ็ต */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: #fff3e6;
+}
+
+/* พื้นหลังหน้าจอ */
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* กล่องฟอร์ม */
+.register-box {
+  background: #fff;
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(255, 153, 102, 0.1);
+  text-align: center;
+}
+
+/* หัวข้อ */
+.register-title {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* โลโก้ */
+.register-logo-wrapper {
+  margin-bottom: 2rem;
+}
+
+.register-logo-circle {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  background-color: #f29c7e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* input group */
+.register-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.register-input-label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.register-input-field {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 1rem;
+  outline: none;
+  background-color: #fffaf5;
+  color: black;
+  transition: border-color 0.3s;
+}
+
+.register-input-field:focus {
+  border-color: #f76a3c;
+}
+
+/* password field */
+.register-password-field {
+  position: relative;
+}
+
+.register-password-field input {
+  padding-right: 2rem;
+}
+
+.register-toggle-password {
+  position: absolute;
+  right: 0.5rem;
+  top: 30%;
+  cursor: pointer;
+}
+
+/* ปุ่ม */
+.register-button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(to right, #ff9966, #ff5e62);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.register-button:hover {
+  transform: scale(1.02);
+}
+
+/* ลิงก์ Log in */
+.register-login-link {
+  font-size: 0.85rem;
+  margin-top: 1.5rem;
+  color: #777;
+}
+
+.register-login-link-a {
+  color: #ff5e62;
+  text-decoration: none;
+}
