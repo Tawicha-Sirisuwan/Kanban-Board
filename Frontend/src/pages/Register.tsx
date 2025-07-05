@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Register.css'
+import { API_URL } from '../config'  // 🔹 ถ้ามีไฟล์ config.tsx
 
 function Register() {
   const [username, setUsername] = useState('')
@@ -8,17 +9,41 @@ function Register() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (password !== confirmPassword) {
-      alert('Passwords do not match!')
+      alert('รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง')
       return
     }
 
-    console.log({ username, email, password })
-    // TODO: call register API here
+    try {
+      const response = await fetch(`${API_URL}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        alert('✅ Registration successful!')
+        navigate('/login')
+      } else {
+        alert(`Failed to register: ${data.detail || 'Unknown error'}`)
+      }
+    } catch (err) {
+      console.error('Register error:', err)
+      alert('Network error. Please try again.')
+    }
   }
 
   return (
@@ -49,7 +74,6 @@ function Register() {
             className="register-input-field"
             type="email"
             value={email}
-            placeholder="johndoe@example.com"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -69,9 +93,7 @@ function Register() {
             <span
               className="register-toggle-password"
               onClick={() => setShowPassword(!showPassword)}
-            >
-              👁
-            </span>
+            >👁</span>
           </div>
         </div>
 
@@ -89,9 +111,7 @@ function Register() {
             <span
               className="register-toggle-password"
               onClick={() => setShowPassword(!showPassword)}
-            >
-              👁
-            </span>
+            >👁</span>
           </div>
         </div>
 
