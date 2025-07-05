@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Env
+myenv/
+env/
+venv/
+
+# VSCode
+.vscode/
+.env
+# ระบบอื่น ๆ
+*.log
+*.sqlite3
