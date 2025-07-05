@@ -1,100 +1,37 @@
-/* Main.css */
-body {
-  background-color: #0f0f0f;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white;
-  margin: 0;
-  padding: 0;
-}
-
-.kanban-board {
-  display: flex;
-  gap: 16px;
-  padding: 32px;
-  overflow-x: auto;
-}
-
-.kanban-column {
-  min-width: 280px;
-  max-width: 320px;
-  background-color: #1a1a1a;
-  border-radius: 10px;
-  padding: 16px;
-  flex-shrink: 0;
+/* ครอบทั้งหมดแบบแนวตั้ง */
+.main-container {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  background-color: #fff4eb;
+  overflow: hidden;
+}
+
+/* ส่วนของ board ที่ scroll แนวนอน */
+.kanban-board {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  padding: 16px 24px;
+  gap: 16px;
+  flex: 1;
+}
+
+/* คอลัมน์แต่ละสถานะ */
+.kanban-column {
+  flex: 0 0 300px;
+  border-radius: 16px;
+  padding: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   height: fit-content;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  min-height: 200px;
 }
 
-.kanban-column-title {
-  font-size: 18px;
+/* หัวคอลัมน์ */
+.kanban-column-header {
   font-weight: bold;
-  margin-bottom: 16px;
-  color: white;
-  padding-left: 6px;
-  border-left: 5px solid #888;
-}
-
-.kanban-card {
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 12px;
+  font-size: 1.1rem;
+  text-align: center;
   margin-bottom: 12px;
-  transition: background 0.2s;
-}
-
-.kanban-card:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-.kanban-card-title {
-  font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 10px;
-}
-
-.kanban-card-meta {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 12px;
-  color: #ccc;
-}
-
-.kanban-avatar {
-  background-color: #333;
-  color: white;
-  font-weight: bold;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.kanban-card-assignee {
-  font-size: 13px;
-  font-weight: 500;
-  color: white;
-}
-
-.kanban-card-tag {
-  background-color: #444;
-  color: #bbb;
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  margin-top: 2px;
-}
-
-.kanban-card-date {
-  font-size: 11px;
-  color: #aaa;
-  margin-top: 2px;
 }

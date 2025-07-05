@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import TaskCard from '../components/TaskCard'; // นำเข้า TaskCard component สำหรับแสดงแต่ละ task
-import type { Task } from '../models/TaskModels'; // นำเข้า interface Task เพื่อใช้กับ TypeScript
-import './Main.css'; // นำเข้า CSS สำหรับสไตล์ของหน้า
+import React, { useState, useEffect } from 'react';
+import TaskCard from '../components/TaskCard';
+import type { Task } from '../models/TaskModels';
+import Navbar from '../components/Navbar';
+import './Main.css';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config'; // ถ้ามี config.tsx
 
-// ข้อมูล mock เริ่มต้นของ task ทั้งหมด
+// ✅ mock task list
 const initialTasks: Task[] = [
   {
     id: 1,
@@ -52,7 +55,7 @@ const initialTasks: Task[] = [
   },
 ];
 
-// กำหนดคอลัมน์สำหรับสถานะของ task แต่ละประเภท พร้อมสีพื้นหลัง
+// ✅ สถานะของแต่ละคอลัมน์
 const statusColumns = [
   { key: 'Not started', color: '#1e1e1e' },
   { key: 'In development', color: '#003554' },
@@ -61,25 +64,63 @@ const statusColumns = [
   { key: 'Done', color: '#0b3d2e' },
 ];
 
-// Component หลักที่ใช้แสดง Kanban board
 const Main: React.FC = () => {
-  const [tasks] = useState(initialTasks); // กำหนดสถานะของ tasks (ใช้ useState เพื่อรองรับการเปลี่ยนแปลงในอนาคต)
+  const [tasks] = useState(initialTasks);
+  const [user, setUser] = useState<{ name: string; avatar: string } | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error('Unauthorized');
+
+        const data = await res.json();
+
+        setUser({
+          name: data.username || data.email || 'User',
+          avatar: '/images/user1.jpg', // ✅ เปลี่ยนได้ตามจริงในอนาคต
+        });
+      } catch (err) {
+        console.error('⚠️ Failed to fetch user', err);
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
+    };
+
+    fetchUser();
+  }, [navigate]);
+
+  if (!user) return <div className="loading">Loading user...</div>;
 
   return (
-    <div className="kanban-board">
-      {/* วนลูปสร้างแต่ละคอลัมน์ตามสถานะ */}
-      {statusColumns.map((col) => (
-        <div key={col.key} className="kanban-column" style={{ backgroundColor: col.color }}>
-          <div className="kanban-column-header">{col.key}</div>
+    <div className="main-container">
+      <Navbar user={user} />
 
-          {/* วนลูปสร้าง TaskCard เฉพาะที่ตรงกับสถานะในแต่ละคอลัมน์ */}
-          {tasks
-            .filter((task) => task.status === col.key)
-            .map((task) => (
-              <TaskCard key={task.id} task={task} />
-            ))}
-        </div>
-      ))}
+      <div className="kanban-board">
+        {statusColumns.map((col) => (
+          <div key={col.key} className="kanban-column" style={{ backgroundColor: col.color }}>
+            <div className="kanban-column-header">{col.key}</div>
+
+            {tasks
+              .filter((task) => task.status === col.key)
+              .map((task) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
