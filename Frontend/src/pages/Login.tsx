@@ -1,23 +1,44 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 import "./Login.css";
 
 function Login() {
-  const [identifier, setIdentifier] = useState(""); // ✅ ใช้แทน email
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log({
-      loginWith: identifier.includes("@") ? "email" : "username",
-      identifier,
-      password,
-    });
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          password,
+        }),
+      });
 
-    // TODO: ส่งค่า identifier + password ไป API
-    // API ฝั่ง backend ควรเช็คได้ทั้ง email หรือ username จาก field เดียว
+      const data = await response.json();
+
+      if (response.ok) {
+       
+        localStorage.setItem("token", data.access_token);
+        alert(`✅ Welcome, ${data.username}`);
+    
+        navigate("/"); // หรือเปลี่ยนเป็นหน้าอื่นที่คุณมี
+      } else {
+        alert("❌ Login Failed: " + data.detail);
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("⚠️ Network Error. Please try again.");
+    }
   };
 
   return (

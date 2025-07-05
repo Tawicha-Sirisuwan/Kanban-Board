@@ -1,9 +1,18 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from user.routes import router as user_router
 from user.schema import Base
 from database.connection import engine, Base
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],                      
+    allow_headers=["*"],                     
+)
 
 Base.metadata.create_all(bind=engine)
 
