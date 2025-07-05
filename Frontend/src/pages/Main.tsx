@@ -90,7 +90,7 @@ const Main: React.FC = () => {
 
         setUser({
           name: data.username || data.email || 'User',
-          avatar: '/images/user1.jpg', // ✅ เปลี่ยนได้ตามจริงในอนาคต
+          avatar: './image/user_profile.jpg', 
         });
       } catch (err) {
         console.error('⚠️ Failed to fetch user', err);
