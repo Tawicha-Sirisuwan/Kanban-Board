@@ -2,10 +2,55 @@ import React, { useState } from 'react';
 import TaskCard from '../components/TaskCard';
 import type { Task } from '../models/TaskModels';
 import Navbar from '../components/Navbar';
+import ColumnModal from '../components/ColumnModal';
 import './BoardDetail.css';
 
 const initialTasks: Task[] = [
-  // ... (ข้อมูล task เดิม)
+  {
+    id: 1,
+    title: 'Integrate into existing codebase',
+    assignee: 'Andrea Lim',
+    department: 'Engineering',
+    members: 'John, Sarah',
+    date: 'December 23, 2024',
+    status: 'Testing',
+  },
+  {
+    id: 2,
+    title: 'Fix login bug on mobile',
+    assignee: 'Ben Lang',
+    department: 'QA',
+    members: 'David',
+    date: 'December 25, 2024',
+    status: 'In development',
+  },
+  {
+    id: 3,
+    title: 'Prepare demo slides for client',
+    assignee: 'Emily Chan',
+    department: 'Marketing',
+    members: 'Olivia, Kevin',
+    date: 'December 28, 2024',
+    status: 'Not started',
+  },
+  {
+    id: 4,
+    title: 'UI Review for Settings Page',
+    assignee: 'Nate Martins',
+    department: 'Design',
+    members: 'Sophie',
+    date: 'December 26, 2024',
+    status: 'Reviewing',
+  },
+  {
+    id: 5,
+    title: 'Deploy version 1.1.0',
+    assignee: 'Sohrab Amin',
+    department: 'DevOps',
+    members: 'John',
+    date: 'December 27, 2024',
+    status: 'Done',
+  },
 ];
 
 const defaultStatusColumns = [
@@ -19,15 +64,11 @@ const defaultStatusColumns = [
 const BoardDetail: React.FC = () => {
   const [tasks] = useState(initialTasks);
   const [columns, setColumns] = useState(defaultStatusColumns);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleAddColumn = () => {
-    const name = prompt("ชื่อคอลัมน์ใหม่:");
-    if (name && name.trim()) {
-      setColumns([
-        ...columns,
-        { key: name.trim(), color: '#4a4a4a' }, // สี default
-      ]);
-    }
+  const handleCreateColumn = (name: string, color: string) => {
+    setColumns([...columns, { key: name, color }]);
+    setShowModal(false);
   };
 
   return (
@@ -36,7 +77,10 @@ const BoardDetail: React.FC = () => {
 
       <div className="board-detail-header">
         <h2>รายละเอียดบอร์ด</h2>
-        <button className="board-detail-add-column-btn" onClick={handleAddColumn}>
+        <button
+          className="board-detail-add-column-btn"
+          onClick={() => setShowModal(true)}
+        >
           + เพิ่มคอลัมน์
         </button>
       </div>
@@ -57,6 +101,10 @@ const BoardDetail: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {showModal && (
+        <ColumnModal onClose={() => setShowModal(false)} onCreate={handleCreateColumn} />
+      )}
     </div>
   );
 };
