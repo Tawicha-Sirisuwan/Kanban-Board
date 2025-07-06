@@ -36,16 +36,3 @@ class BoardMember(Base):
 
 
 
-# 3. Task
-class Task(Base):
-    __tablename__ = "tasks"
-
-    task_id = Column(Integer, primary_key=True, index=True)
-    column_id = Column(Integer, ForeignKey("board_columns.column_id"))  # ✅ เปลี่ยนชื่อตารางให้ถูกต้อง
-    title = Column(String, nullable=False)
-    position = Column(Integer)
-    created_by = Column(Integer, ForeignKey("users.user_id"))
-    due_date = Column(DateTime)
-
-    column = relationship("BoardColumn", back_populates="tasks")
-    creator = relationship("User", back_populates="created_tasks")

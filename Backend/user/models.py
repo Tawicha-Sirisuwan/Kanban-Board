@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from database.connection import Base
+from task.models import Task
 
 class User(Base):
     __tablename__ = "users"
@@ -12,4 +13,4 @@ class User(Base):
 
     boards = relationship("Board", back_populates="owner")
     board_memberships = relationship("BoardMember", back_populates="user")
-    created_tasks = relationship("Task", back_populates="creator")
+    created_tasks = relationship("task.models.Task", back_populates="creator")
