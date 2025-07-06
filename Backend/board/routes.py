@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database.connection import SessionLocal
-from board.models import Board  # ✅ ใช้ SQLAlchemy model
-from board.schema import BoardCreate, BoardOut  # ✅ ใช้ Pydantic schema
+from board.models import Board  
+from board.schema import BoardCreate, BoardOut  
 
 router = APIRouter()
 

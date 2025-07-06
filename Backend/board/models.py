@@ -31,7 +31,7 @@ class BoardMember(Base):
     user = relationship("User", back_populates="board_memberships")
 
 
-# 3. BoardColumn (เปลี่ยนชื่อจาก Column เพื่อไม่ชน SQLAlchemy)
+# 3. BoardColumn 
 class BoardColumn(Base):
     __tablename__ = "columns"
 

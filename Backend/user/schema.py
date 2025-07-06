@@ -1,15 +1,18 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from database.connection import Base
+from pydantic import BaseModel, EmailStr
 
-class User(Base):
-    __tablename__ = "users"
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
 
-    user_id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
+class UserLogin(BaseModel):
+    identifier: str  # ใช้ได้ทั้ง username หรือ email
+    password: str
 
-    boards = relationship("Board", back_populates="owner")
-    board_memberships = relationship("BoardMember", back_populates="user")
-    created_tasks = relationship("Task", back_populates="creator")
+class UserOut(BaseModel):
+    user_id: int
+    username: str
+    email: EmailStr
+
+    class Config:
+        orm_mode = True
