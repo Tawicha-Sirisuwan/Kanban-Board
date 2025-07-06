@@ -1,22 +1,52 @@
-// src/components/CreateColumnModal.tsx
+// src/components/ColumnModal.tsx
 import React, { useState } from 'react';
 import './ColumnModal.css';
+import { API_URL } from '../config';
 
 interface CreateColumnModalProps {
+  boardId: number;
   onClose: () => void;
-  onCreate: (name: string, color: string) => void;
+  onCreate: () => void; // fetchColumns หลังสร้างสำเร็จ
 }
 
-const ColumnModal: React.FC<CreateColumnModalProps> = ({ onClose, onCreate }) => {
+const ColumnModal: React.FC<CreateColumnModalProps> = ({
+  boardId,
+  onClose,
+  onCreate,
+}) => {
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#1e1e1e');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onCreate(name, color);
-    setName('');
-    setColor('#1e1e1e');
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/board-columns`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          board_id: boardId,
+          title: name,
+        }),
+      });
+
+      if (!res.ok) throw new Error('สร้างคอลัมน์ไม่สำเร็จ');
+      await res.json();
+
+      onCreate(); // ดึงข้อมูลใหม่
+      onClose();  // ปิด Modal
+    } catch (err) {
+      console.error('❌ สร้าง column ล้มเหลว:', err);
+      alert('เกิดข้อผิดพลาดในการสร้างคอลัมน์');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,14 +68,9 @@ const ColumnModal: React.FC<CreateColumnModalProps> = ({ onClose, onCreate }) =>
             required
           />
 
-          <label>เลือกสีพื้นหลัง</label>
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-
-          <button type="submit">เพิ่มคอลัมน์</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'กำลังเพิ่ม...' : 'เพิ่มคอลัมน์'}
+          </button>
         </form>
       </div>
     </div>

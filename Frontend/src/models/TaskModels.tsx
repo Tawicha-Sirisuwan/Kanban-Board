@@ -6,4 +6,5 @@ export interface Task {
   members: string;
   date: string;
   status: 'Not started' | 'In development' | 'Testing' | 'Reviewing' | 'Done';
+  column_id: number; 
 }

@@ -1,3 +1,4 @@
+// src/pages/BoardPage.tsx
 import React, { useEffect, useState } from 'react';
 import './BoardPage.css';
 import Navbar from '../components/Navbar';
@@ -37,7 +38,16 @@ const BoardPage: React.FC = () => {
         if (!res.ok) throw new Error('Failed to fetch boards');
 
         const data = await res.json();
-        setBoards(data);
+        console.log('🟢 Boards from API:', data);
+
+        // ✅ แปลงชื่อ field ให้ตรงกับ interface
+        const formatted = data.map((b: any) => ({
+          id: b.board_id ?? b.id, // รองรับทั้ง board_id และ id
+          name: b.name,
+          description: b.description,
+        }));
+
+        setBoards(formatted);
       } catch (err) {
         console.error('❌ ไม่สามารถโหลดบอร์ดได้:', err);
       }

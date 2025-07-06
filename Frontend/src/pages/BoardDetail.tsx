@@ -1,82 +1,85 @@
-import React, { useState } from 'react';
-import TaskCard from '../components/TaskCard';
-import type { Task } from '../models/TaskModels';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ColumnModal from '../components/ColumnModal';
+import ColumnCard from '../components/ColumnCard';
+import { API_URL } from '../config';
 import './BoardDetail.css';
+import type { Task } from '../models/TaskModels';
 
-const initialTasks: Task[] = [
-  {
-    id: 1,
-    title: 'Integrate into existing codebase',
-    assignee: 'Andrea Lim',
-    department: 'Engineering',
-    members: 'John, Sarah',
-    date: 'December 23, 2024',
-    status: 'Testing',
-  },
-  {
-    id: 2,
-    title: 'Fix login bug on mobile',
-    assignee: 'Ben Lang',
-    department: 'QA',
-    members: 'David',
-    date: 'December 25, 2024',
-    status: 'In development',
-  },
-  {
-    id: 3,
-    title: 'Prepare demo slides for client',
-    assignee: 'Emily Chan',
-    department: 'Marketing',
-    members: 'Olivia, Kevin',
-    date: 'December 28, 2024',
-    status: 'Not started',
-  },
-  {
-    id: 4,
-    title: 'UI Review for Settings Page',
-    assignee: 'Nate Martins',
-    department: 'Design',
-    members: 'Sophie',
-    date: 'December 26, 2024',
-    status: 'Reviewing',
-  },
-  {
-    id: 5,
-    title: 'Deploy version 1.1.0',
-    assignee: 'Sohrab Amin',
-    department: 'DevOps',
-    members: 'John',
-    date: 'December 27, 2024',
-    status: 'Done',
-  },
-];
-
-const defaultStatusColumns = [
-  { key: 'Not started', color: '#1e1e1e' },
-  { key: 'In development', color: '#003554' },
-  { key: 'Testing', color: '#3a003a' },
-  { key: 'Reviewing', color: '#2d1b4f' },
-  { key: 'Done', color: '#0b3d2e' },
-];
+interface Column {
+  id: number;
+  name: string;
+  color: string;
+}
 
 const BoardDetail: React.FC = () => {
-  const [tasks] = useState(initialTasks);
-  const [columns, setColumns] = useState(defaultStatusColumns);
+  const { boardId } = useParams<{ boardId: string }>();
+  const navigate = useNavigate();
+
+  const [columns, setColumns] = useState<Column[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [showModal, setShowModal] = useState(false);
 
-  const handleCreateColumn = (name: string, color: string) => {
-    setColumns([...columns, { key: name, color }]);
-    setShowModal(false);
-  };
+  useEffect(() => {
+    if (!boardId) {
+      navigate('/');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    const fetchColumns = async () => {
+      try {
+        const res = await fetch(`${API_URL}/board-columns/${boardId}`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+        const data = await res.json();
+
+        const mapped = data.map((col: any) => ({
+          id: col.id ?? col.column_id,
+          name: col.name ?? col.title ?? 'Untitled',
+          color: col.color ?? '#1e1e1e',
+        }));
+
+        setColumns(mapped);
+      } catch (err) {
+        console.error('❌ Error loading columns:', err);
+      }
+    };
+
+    const fetchTasks = async () => {
+      try {
+        const res = await fetch(`${API_URL}/boards/${boardId}/tasks`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        const mapped = data.map((task: any) => ({
+          ...task,
+          column_id: task.column_id ?? task.column?.id, // รองรับหลายกรณี
+        }));
+
+        setTasks(mapped);
+      } catch (err) {
+        console.error('❌ Error loading tasks:', err);
+      }
+    };
+
+    fetchColumns();
+    fetchTasks();
+  }, [boardId, navigate]);
 
   return (
     <div className="board-detail-container">
       <Navbar />
 
       <div className="board-detail-header">
-        <h2>รายละเอียดบอร์ด</h2>
+        <h2>รายละเอียดบอร์ด #{boardId}</h2>
         <button
           className="board-detail-add-column-btn"
           onClick={() => setShowModal(true)}
@@ -87,23 +90,36 @@ const BoardDetail: React.FC = () => {
 
       <div className="board-detail-kanban">
         {columns.map((col) => (
-          <div
-            key={col.key}
-            className="board-detail-column"
-            style={{ backgroundColor: col.color }}
-          >
-            <div className="board-detail-column-header">{col.key}</div>
-            {tasks
-              .filter((task) => task.status === col.key)
-              .map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
-          </div>
+          <ColumnCard
+            key={col.id}
+            columnId={col.id}
+            title={col.name}
+            color={col.color}
+            tasks={tasks.filter((task) => task.column_id === col.id)}
+          />
         ))}
       </div>
 
-      {showModal && (
-        <ColumnModal onClose={() => setShowModal(false)} onCreate={handleCreateColumn} />
+      {showModal && boardId && (
+        <ColumnModal
+          onClose={() => setShowModal(false)}
+          boardId={parseInt(boardId)}
+          onCreate={async () => {
+            setShowModal(false);
+            await new Promise((r) => setTimeout(r, 100));
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/boards/${boardId}/columns`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            const mapped = data.map((col: any) => ({
+              id: col.id ?? col.column_id,
+              name: col.name ?? col.title ?? 'Untitled',
+              color: col.color ?? '#1e1e1e',
+            }));
+            setColumns(mapped);
+          }}
+        />
       )}
     </div>
   );
