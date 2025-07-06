@@ -1,0 +1,35 @@
+/* src/styles/BoardCard.css */
+
+.board-card {
+  width: 220px;
+  min-height: 120px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.board-card h2 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0 0 0.5rem;
+  word-break: break-word;
+}
+
+.board-card p {
+  font-size: 0.9rem;
+  color: #666;
+  word-break: break-word;
+}
+
+.board-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f8f9fa;
+}

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TaskCard from '../components/TaskCard';
 import type { Task } from '../models/TaskModels';
 import Navbar from '../components/Navbar';
 import './Main.css';
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../config'; // ถ้ามี config.tsx
 
 // ✅ mock task list
 const initialTasks: Task[] = [
@@ -66,47 +64,10 @@ const statusColumns = [
 
 const Main: React.FC = () => {
   const [tasks] = useState(initialTasks);
-  const [user, setUser] = useState<{ name: string; avatar: string } | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_URL}/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error('Unauthorized');
-
-        const data = await res.json();
-
-        setUser({
-          name: data.username || data.email || 'User',
-          avatar: './image/user_profile.jpg', 
-        });
-      } catch (err) {
-        console.error('⚠️ Failed to fetch user', err);
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-    };
-
-    fetchUser();
-  }, [navigate]);
-
-  if (!user) return <div className="loading">Loading user...</div>;
 
   return (
     <div className="main-container">
-      <Navbar user={user} />
+      <Navbar /> 
 
       <div className="kanban-board">
         {statusColumns.map((col) => (
