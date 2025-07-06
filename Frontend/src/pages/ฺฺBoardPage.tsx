@@ -1,4 +1,3 @@
-// src/pages/BoardPage.tsx
 import React, { useEffect, useState } from 'react';
 import './BoardPage.css';
 import Navbar from '../components/Navbar';
@@ -19,15 +18,35 @@ const BoardPage: React.FC = () => {
   const [user, setUser] = useState<{ name: string; avatar: string } | null>(null);
   const navigate = useNavigate();
 
+  // ✅ โหลดข้อมูลบอร์ดจาก API จริง
   useEffect(() => {
-    const mockBoards: Board[] = [
-      { id: 1, name: 'โครงการ Website', description: 'จัดการงานออกแบบเว็บไซต์' },
-      { id: 2, name: 'ทีมการตลาด', description: 'วางแผนแคมเปญและโพสต์' },
-      { id: 3, name: 'งานส่วนตัว', description: 'สิ่งที่ต้องทำในแต่ละวัน' },
-    ];
-    setBoards(mockBoards);
-  }, []);
+    const fetchBoards = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
 
+      try {
+        const res = await fetch(`${API_URL}/boards`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch boards');
+
+        const data = await res.json();
+        setBoards(data);
+      } catch (err) {
+        console.error('❌ ไม่สามารถโหลดบอร์ดได้:', err);
+      }
+    };
+
+    fetchBoards();
+  }, [navigate]);
+
+  // ✅ ดึงข้อมูลผู้ใช้
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
@@ -61,6 +80,7 @@ const BoardPage: React.FC = () => {
     fetchUser();
   }, [navigate]);
 
+  // ✅ เพิ่มบอร์ดใหม่ลงใน state (เมื่อสร้างสำเร็จ)
   const handleBoardCreated = (newBoard: Board) => {
     setBoards([...boards, newBoard]);
     setShowModal(false);
@@ -70,7 +90,7 @@ const BoardPage: React.FC = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div className="board-page-container">
         <div className="board-header">
           <h1>My Boards</h1>
