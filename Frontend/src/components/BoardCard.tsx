@@ -1,15 +1,20 @@
 // src/components/BoardCard.tsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './BoardCard.css';
-import type { Board } from '../models/BoardCardModels';
 
-const BoardCard: React.FC<{ board: Board }> = ({ board }) => {
-  const navigate = useNavigate();
+interface BoardCardProps {
+  board: {
+    id: number;
+    name: string;
+    description: string;
+  };
+  onClick: () => void;
+}
 
+const BoardCard: React.FC<BoardCardProps> = ({ board, onClick }) => {
   return (
-    <div className="board-card" onClick={() => navigate(`/boards/${board.id}`)}>
-      <h2>{board.name}</h2>
+    <div className="board-card" onClick={onClick}>
+      <h3>{board.name}</h3>
       <p>{board.description}</p>
     </div>
   );

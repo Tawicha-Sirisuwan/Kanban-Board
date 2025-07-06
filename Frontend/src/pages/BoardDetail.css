@@ -1,0 +1,56 @@
+.board-detail-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #fff4eb;
+  overflow: hidden;
+}
+
+.board-detail-kanban {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  padding: 16px 24px;
+  gap: 16px;
+  flex: 1;
+}
+
+.board-detail-column {
+  flex: 0 0 300px;
+  border-radius: 16px;
+  padding: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  min-height: 200px;
+}
+
+.board-detail-column-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.board-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #fff4eb;
+}
+
+.board-detail-add-column-btn {
+  background-color: #000;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.board-detail-add-column-btn:hover {
+  background-color: #333;
+}

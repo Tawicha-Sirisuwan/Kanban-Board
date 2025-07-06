@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
-// import Main from './pages/Main'
+import BoardDetail from './pages/BoardDetail'
 import BoardPage from './pages/ฺฺBoardPage'
 function App() {
   return (
@@ -10,6 +10,7 @@ function App() {
         <Route path="/" element={<BoardPage/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/board/:id" element={<BoardDetail />} />
       </Routes>
     </BrowserRouter>
   )
