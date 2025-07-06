@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from database.connection import SessionLocal
 from board.models import Board  
 from board.schema import BoardCreate, BoardOut  
+from user.auth import get_current_user
+from user.models import User  
 
 router = APIRouter()
 
@@ -14,11 +16,15 @@ def get_db():
         db.close()
 
 @router.post("/boards", response_model=BoardOut)
-def create_board(board: BoardCreate, db: Session = Depends(get_db)):
+def create_board(
+    board: BoardCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  
+):
     new_board = Board(
         title=board.title,
         description=board.description,
-        owner_id=1  
+        owner_id=current_user.user_id  
     )
     db.add(new_board)
     db.commit()
