@@ -5,6 +5,7 @@ from board.routes import router as board_router
 from database.connection import engine, Base 
 from column.routes import router as column_router
 from task.routes import router as task_router
+from board_member.routes import router as board_member_router
 
 app = FastAPI()
 
@@ -22,3 +23,4 @@ app.include_router(user_router)
 app.include_router(board_router)
 app.include_router(column_router)
 app.include_router(task_router)
+app.include_router(board_member_router)
