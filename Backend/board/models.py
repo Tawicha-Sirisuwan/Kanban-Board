@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 from database.connection import Base
 from datetime import datetime
 
+
+from column.models import BoardColumn
+
 # 1. Board
 class Board(Base):
     __tablename__ = "boards"
@@ -31,25 +34,14 @@ class BoardMember(Base):
     user = relationship("User", back_populates="board_memberships")
 
 
-# 3. BoardColumn 
-class BoardColumn(Base):
-    __tablename__ = "columns"
-
-    column_id = Column(Integer, primary_key=True, index=True)
-    board_id = Column(Integer, ForeignKey("boards.board_id"))
-    title = Column(String, nullable=False)
-    position = Column(Integer)
-
-    board = relationship("Board", back_populates="columns")
-    tasks = relationship("Task", back_populates="column", cascade="all, delete")
 
 
-# 4. Task
+# 3. Task
 class Task(Base):
     __tablename__ = "tasks"
 
     task_id = Column(Integer, primary_key=True, index=True)
-    column_id = Column(Integer, ForeignKey("columns.column_id"))
+    column_id = Column(Integer, ForeignKey("board_columns.column_id"))  # ✅ เปลี่ยนชื่อตารางให้ถูกต้อง
     title = Column(String, nullable=False)
     position = Column(Integer)
     created_by = Column(Integer, ForeignKey("users.user_id"))
