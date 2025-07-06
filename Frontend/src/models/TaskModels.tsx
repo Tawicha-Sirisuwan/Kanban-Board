@@ -1,10 +1,14 @@
 export interface Task {
-  id: number;
+  id: number;           // ← task_id
+  column_id: number;
   title: string;
-  assignee: string;
-  department: string;
-  members: string;
-  date: string;
-  status: 'Not started' | 'In development' | 'Testing' | 'Reviewing' | 'Done';
-  column_id: number; 
+  due_date: string;     // ← PostgreSQL date
+  position: number;
+  created_by: number;
+
+  // Optional UI fields (default fallback)
+  status?: string;
+  assignee?: string;
+  department?: string;
+  members?: string;
 }

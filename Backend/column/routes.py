@@ -1,9 +1,8 @@
-# column/routes.py
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Path
 from sqlalchemy.orm import Session
 from database.connection import SessionLocal
 from column.models import BoardColumn
-from column.schema import ColumnCreateWithoutPosition, ColumnOut
+from column.schema import ColumnCreateWithoutPosition, ColumnOut, ColumnUpdate
 from user.auth import get_current_user
 from user.models import User
 
@@ -22,7 +21,6 @@ def create_column(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # ✅ ดึง position ล่าสุดของ board นี้
     last_column = (
         db.query(BoardColumn)
         .filter(BoardColumn.board_id == column.board_id)
@@ -48,3 +46,33 @@ def get_columns_by_board(
     current_user: User = Depends(get_current_user)
 ):
     return db.query(BoardColumn).filter(BoardColumn.board_id == board_id).order_by(BoardColumn.position).all()
+
+@router.put("/board-columns/{column_id}", response_model=ColumnOut)
+def update_column(
+    column_id: int,
+    column_update: ColumnUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    column = db.query(BoardColumn).filter(BoardColumn.column_id == column_id).first()
+    if not column:
+        raise HTTPException(status_code=404, detail="Column not found")
+
+    column.title = column_update.title
+    db.commit()
+    db.refresh(column)
+    return column
+
+@router.delete("/board-columns/{column_id}")
+def delete_column(
+    column_id: int = Path(..., description="The ID of the column to delete"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    column = db.query(BoardColumn).filter(BoardColumn.column_id == column_id).first()
+    if not column:
+        raise HTTPException(status_code=404, detail="Column not found")
+
+    db.delete(column)
+    db.commit()
+    return {"message": "Column deleted successfully"}

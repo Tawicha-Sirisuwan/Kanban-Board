@@ -9,7 +9,7 @@ import type { Task } from '../models/TaskModels';
 
 interface Column {
   id: number;
-  name: string;
+  title: string;
   color: string;
 }
 
@@ -21,54 +21,56 @@ const BoardDetail: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [showModal, setShowModal] = useState(false);
 
+  const fetchColumns = async () => {
+    const token = localStorage.getItem('token');
+    if (!token || !boardId) return;
+
+    try {
+      const res = await fetch(`${API_URL}/board-columns/${boardId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      const mapped = data.map((col: any) => ({
+        id: col.id ?? col.column_id,
+        title: col.title ?? col.name ?? 'Untitled',
+        color: col.color ?? '#1e1e1e',
+      }));
+      setColumns(mapped);
+    } catch (err) {
+      console.error('❌ Error loading columns:', err);
+    }
+  };
+
+  const fetchTasks = async () => {
+    const token = localStorage.getItem('token');
+    if (!token || !boardId) return;
+
+    try {
+      const res = await fetch(`${API_URL}/boards/${boardId}/tasks`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      const mapped = data.map((task: any) => ({
+        ...task,
+        column_id: task.column_id ?? task.column?.id,
+      }));
+      setTasks(mapped);
+    } catch (err) {
+      console.error('❌ Error loading tasks:', err);
+    }
+  };
+
   useEffect(() => {
+    const token = localStorage.getItem('token');
     if (!boardId) {
       navigate('/');
       return;
     }
 
-    const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
       return;
     }
-
-    const fetchColumns = async () => {
-      try {
-        const res = await fetch(`${API_URL}/board-columns/${boardId}`, {
-  headers: { Authorization: `Bearer ${token}` },
-});
-        const data = await res.json();
-
-        const mapped = data.map((col: any) => ({
-          id: col.id ?? col.column_id,
-          name: col.name ?? col.title ?? 'Untitled',
-          color: col.color ?? '#1e1e1e',
-        }));
-
-        setColumns(mapped);
-      } catch (err) {
-        console.error('❌ Error loading columns:', err);
-      }
-    };
-
-    const fetchTasks = async () => {
-      try {
-        const res = await fetch(`${API_URL}/boards/${boardId}/tasks`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-
-        const mapped = data.map((task: any) => ({
-          ...task,
-          column_id: task.column_id ?? task.column?.id, // รองรับหลายกรณี
-        }));
-
-        setTasks(mapped);
-      } catch (err) {
-        console.error('❌ Error loading tasks:', err);
-      }
-    };
 
     fetchColumns();
     fetchTasks();
@@ -93,9 +95,10 @@ const BoardDetail: React.FC = () => {
           <ColumnCard
             key={col.id}
             columnId={col.id}
-            title={col.name}
+            title={col.title}
             color={col.color}
             tasks={tasks.filter((task) => task.column_id === col.id)}
+            onUpdate={fetchColumns}
           />
         ))}
       </div>
@@ -107,17 +110,7 @@ const BoardDetail: React.FC = () => {
           onCreate={async () => {
             setShowModal(false);
             await new Promise((r) => setTimeout(r, 100));
-            const token = localStorage.getItem('token');
-            const res = await fetch(`${API_URL}/boards/${boardId}/columns`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            const data = await res.json();
-            const mapped = data.map((col: any) => ({
-              id: col.id ?? col.column_id,
-              name: col.name ?? col.title ?? 'Untitled',
-              color: col.color ?? '#1e1e1e',
-            }));
-            setColumns(mapped);
+            fetchColumns();
           }}
         />
       )}
