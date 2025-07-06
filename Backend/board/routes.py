@@ -32,5 +32,8 @@ def create_board(
     return new_board
 
 @router.get("/boards", response_model=list[BoardOut])
-def get_all_boards(db: Session = Depends(get_db)):
-    return db.query(Board).all()
+def get_all_boards(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return db.query(Board).filter(Board.owner_id == current_user.user_id).all()
