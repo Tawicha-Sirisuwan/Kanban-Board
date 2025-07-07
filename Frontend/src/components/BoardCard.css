@@ -1,35 +1,95 @@
-/* src/styles/BoardCard.css */
-
 .board-card {
-  width: 220px;
-  min-height: 120px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.board-card h2 {
-  font-size: 1.1rem;
-  color: #333;
-  margin: 0 0 0.5rem;
-  word-break: break-word;
-}
-
-.board-card p {
-  font-size: 0.9rem;
-  color: #666;
-  word-break: break-word;
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  cursor: default;
+  position: relative;
+  transition: box-shadow 0.3s ease;
 }
 
 .board-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #f8f9fa;
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+}
+
+.board-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.board-title-container {
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.board-title {
+  margin: 0 0 4px 0;
+  color: #222;
+  font-weight: 700;
+  font-size: 1.2rem;
+  word-break: break-word;
+}
+
+.board-description {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  min-height: 24px;
+}
+
+.board-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.board-btn {
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:28px;
+  height: 28px;
+  transition: background-color 0.2s ease;
+}
+
+.board-btn.edit {
+  background-color: #f5a623;
+}
+
+.board-btn.edit:hover {
+  background-color: #d49f1a;
+}
+
+.board-btn.delete {
+  background-color: #ac2626;
+}
+
+.board-btn.delete:hover {
+  background-color: #cc2d26;
+}
+
+.board-card input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+.board-card button {
+  margin-right: 8px;
+}
+
+.board-card button:last-child {
+  margin-right: 0;
 }

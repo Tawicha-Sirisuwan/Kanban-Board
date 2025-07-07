@@ -9,7 +9,7 @@ import { API_URL } from '../config';
 
 interface Board {
   id: number;
-  name: string;
+  title: string;
   description: string;
 }
 
@@ -43,7 +43,7 @@ const BoardPage: React.FC = () => {
         // ✅ แปลงชื่อ field ให้ตรงกับ interface
         const formatted = data.map((b: any) => ({
           id: b.board_id ?? b.id, // รองรับทั้ง board_id และ id
-          name: b.name,
+          title: b.title,
           description: b.description,
         }));
 
@@ -56,7 +56,7 @@ const BoardPage: React.FC = () => {
     fetchBoards();
   }, [navigate]);
 
-  // ✅ ดึงข้อมูลผู้ใช้
+
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
