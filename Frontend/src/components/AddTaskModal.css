@@ -1,101 +1,100 @@
-/* CSS สำหรับ Modal เพิ่ม Task */
+/* Modal overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* ใช้สีดำทึบขึ้นเล็กน้อย */
+  background: rgba(0, 0, 0, 0.5);  /* ดำมืดให้ modal เด่นขึ้น */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease-in-out; /* เพิ่มแอนิเมชั่นให้การแสดง Modal */
 }
 
+/* Modal content */
 .modal-content {
-  background-color: #341a1a;
-  padding: 20px;
-  border-radius: 12px; /* ทำมุมให้กลมขึ้น */
-  width: 420px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  width: 400px;
   max-width: 90%;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ดูนุ่มนวล */
-  animation: slideIn 0.4s ease-in-out; /* แอนิเมชั่นในการเลื่อน Modal เข้ามา */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  transform: scale(1);
 }
 
+.modal-content h3 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #007BFF; /* ปรับสี border เมื่อ focus */
+  outline: none;
+  background-color: #fff;
+}
+
+/* Modal actions (buttons) */
 .modal-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.modal-actions button {
-  padding: 10px 20px;
-  border-radius: 8px; /* มุมโค้งมากขึ้น */
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold; /* ขีดตัวหนาสำหรับปุ่ม */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* เพิ่ม transition ให้สวยขึ้น */
+  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
-.modal-actions button:disabled {
-  background-color: #e0e0e0;
+/* 'Add Task' Button */
+button:first-child {
+  background-color: #28a745;  /* ปุ่มเพิ่ม Task */
+  color: white;
+}
+
+button:first-child:disabled {
+  background-color: #6c757d; /* ถ้าปุ่ม disabled ให้สีจาง */
   cursor: not-allowed;
-  transform: scale(1); /* เมื่อปุ่มถูกปิดไม่ให้ทำการเปลี่ยนขนาด */
 }
 
-.modal-actions button:nth-child(1) {
-  background-color: #28a745; /* เขียว */
+button:first-child:hover:enabled {
+  background-color: #218838; /* เปลี่ยนสีเมื่อ hover */
+}
+
+/* 'Cancel' Button */
+button:last-child {
+  background-color: #dc3545;  /* ปุ่มยกเลิก */
   color: white;
 }
 
-.modal-actions button:nth-child(1):hover {
-  background-color: #218838; /* สีเขียวเข้มขึ้นเมื่อ hover */
-  transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
+button:last-child:hover {
+  background-color: #c82333; /* เปลี่ยนสีเมื่อ hover */
 }
 
-.modal-actions button:nth-child(2) {
-  background-color: #dc3545; /* แดง */
-  color: white;
+/* Modal close button */
+button:last-child:disabled {
+  background-color: #6c757d;
 }
 
-.modal-actions button:nth-child(2):hover {
-  background-color: #c82333; /* สีแดงเข้มขึ้นเมื่อ hover */
-  transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
-}
-
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.3s ease;
-}
-
-input:focus, textarea:focus {
-  border-color: #007bff; /* สีฟ้าสำหรับขอบเมื่อ focus */
-  outline: none;
-}
-
-textarea {
-  height: 120px; /* เพิ่มความสูงให้ textarea */
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-20px); /* เลื่อนขึ้นจากข้างล่าง */
-  }
-  to {
-    transform: translateY(0);
-  }
-}

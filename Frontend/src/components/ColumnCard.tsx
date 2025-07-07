@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import type { Task } from '../models/TaskModels';
 import { API_URL } from '../config';
 import './ColumnCard.css';
-import AddTaskModal from './AddTaskModal';  // เพิ่มการใช้งาน AddTaskModal
+import AddTaskModal from './AddTaskModal';
 
 interface ColumnProps {
   columnId: number;
@@ -15,7 +15,13 @@ interface ColumnProps {
 const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate }) => {
   const [editing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const [isModalOpen, setIsModalOpen] = useState(false); // สำหรับเปิด/ปิด AddTaskModal
+  const [taskList, setTaskList] = useState<Task[]>(tasks); // ใช้ taskList เพื่อจัดการกับข้อมูล Task
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+ 
+  useEffect(() => {
+    setTaskList(tasks);
+  }, [tasks]);
 
   const handleRename = async () => {
     const token = localStorage.getItem('token');
@@ -33,7 +39,7 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate })
 
       if (res.ok) {
         setEditing(false);
-        onUpdate?.();
+        onUpdate?.(); // รีเฟรชข้อมูลหลังการแก้ไข
       } else {
         alert('แก้ไขชื่อไม่สำเร็จ');
       }
@@ -57,7 +63,7 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate })
       });
 
       if (res.ok) {
-        onUpdate?.();
+        onUpdate?.(); // รีเฟรชข้อมูลหลังการลบคอลัมน์
       } else {
         alert('ลบไม่สำเร็จ');
       }
@@ -74,9 +80,21 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate })
     setIsModalOpen(false); // ปิด Modal
   };
 
-  const handleTaskAdded = () => {
-    onUpdate?.(); // รีเฟรชข้อมูลเมื่อเพิ่ม Task เสร็จ
+  const handleTaskAdded = (newTask: Task) => {
+    setTaskList((prevTasks) => [...prevTasks, newTask]); // เพิ่ม Task ใหม่ลงใน taskList
+    onUpdate?.(); // รีเฟรชข้อมูลคอลัมน์
     closeAddTaskModal(); // ปิด Modal
+  };
+
+  // ฟังก์ชันที่ใช้รีเฟรช taskList เมื่อมีการอัปเดต Task
+  const handleTaskUpdated = (updatedTask: Task) => {
+    setTaskList((prevTasks) =>
+      prevTasks.map((task) => (task.task_id === updatedTask.task_id ? updatedTask : task)) // รีเฟรช taskList
+    );
+  };
+
+  const handleTaskDeleted = (taskId: number) => {
+    setTaskList((prevTasks) => prevTasks.filter((task) => task.task_id !== taskId)); // รีเฟรช taskList เมื่อ Task ถูกลบ
   };
 
   return (
@@ -98,15 +116,20 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate })
             <div className="column-actions">
               <button className="column-btn add" onClick={openAddTaskModal} title="เพิ่มการ์ด">＋</button>
               <button className="column-btn edit" onClick={() => setEditing(true)} title="แก้ไข">✏️</button>
-              <button className="column-btn delete" onClick={handleDelete} title="ลบคอลัมน์">🗑️</button>
+              <button className="column-btn delete" onClick={handleDelete} title="ลบคอลัมน์">X</button>
             </div>
           </>
         )}
       </div>
 
       <div className="task-list">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+        {taskList.map((task) => (
+          <TaskCard
+            key={task.task_id}
+            task={task}
+            onTaskUpdated={handleTaskUpdated} // ส่งฟังก์ชันที่จัดการการอัปเดต Task
+            onTaskDeleted={handleTaskDeleted} // ส่งฟังก์ชันที่จัดการการลบ Task
+          />
         ))}
       </div>
 
@@ -115,7 +138,7 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate })
         <AddTaskModal
           columnId={columnId}
           onClose={closeAddTaskModal}
-          onTaskAdded={handleTaskAdded}
+          onTaskAdded={handleTaskAdded} // ส่งฟังก์ชันที่รับ Task ใหม่
         />
       )}
     </div>

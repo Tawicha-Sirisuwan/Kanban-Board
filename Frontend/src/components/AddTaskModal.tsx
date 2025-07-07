@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
+import type { Task } from '../models/TaskModels';
 import { API_URL } from '../config';
 import './AddTaskModal.css';
 
-// เพิ่ม columnId ลงใน AddTaskModalProps
+
 interface AddTaskModalProps {
   columnId: number;
   onClose: () => void;
-  onTaskAdded: () => void;
+  onTaskAdded: (task: Task) => void;  // คาดหวังว่า onTaskAdded จะรับ Task ที่ถูกเพิ่ม
 }
 
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAdded }) => {
   const [taskTitle, setTaskTitle] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
-  const [taskDueDate, setTaskDueDate] = useState<string>(''); // state สำหรับ due date
+  const [taskAssignee, setTaskAssignee] = useState('');
+  const [taskDueDate, setTaskDueDate] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleCreateTask = async () => {
@@ -32,17 +33,17 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAd
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          column_id: columnId, // ส่ง columnId ไปยัง API
-          title: taskTitle,     // ชื่อของ Task
-          position: 0,          // ตำแหน่งของ Task (สามารถปรับได้)
-          due_date: taskDueDate, // วันที่ครบกำหนด
-        }),
+        column_id: columnId, // ตรวจสอบว่าค่า column_id ถูกต้อง
+        title: taskTitle,
+        due_date: taskDueDate, // ตรวจสอบว่ามีค่าที่ถูกต้อง
+        position: 0, 
+      }),
       });
 
       if (res.ok) {
-        alert('Task ถูกเพิ่มเรียบร้อย!');
-        onTaskAdded();  // รีเฟรช Task
-        onClose(); // ปิด Modal
+        const newTask = await res.json();  // รับข้อมูล Task ที่ถูกสร้าง
+        onTaskAdded(newTask);  
+        onClose();  
       } else {
         throw new Error('ไม่สามารถเพิ่ม Task ได้');
       }
@@ -64,14 +65,14 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAd
           value={taskTitle}
           onChange={(e) => setTaskTitle(e.target.value)}
         />
-        <textarea
-          placeholder="รายละเอียด Task"
-          value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
+        <input
+          type="text"
+          placeholder="ผู้มอบหมาย"
+          value={taskAssignee}
+          onChange={(e) => setTaskAssignee(e.target.value)}
         />
         <input
           type="date"
-          placeholder="วันที่ครบกำหนด"
           value={taskDueDate}
           onChange={(e) => setTaskDueDate(e.target.value)}
         />

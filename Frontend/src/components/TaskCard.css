@@ -1,71 +1,92 @@
 .task-card {
-  background-color: #1b8080; 
-  border-radius: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   padding: 16px;
-  color: white; 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  transition: transform 0.2s ease;
-}
-
-.task-card:hover {
-  transform: translateY(-4px);
+  background-color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .task-title {
+  font-size: 18px;
   font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  color: #fff;
+  color: #333;
 }
 
 .task-field {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  margin-bottom: 10px;
 }
 
 .task-label {
-  color: #d3d3d3; /* สีเทาอ่อน */
-  font-weight: 600;
+  font-size: 14px;
+  color: #888;
+}
+
+.task-value, .task-tag {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.task-actions {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 16px;
 }
 
-.task-value,
-.task-tag {
-  font-weight: 600;
-  color: #fff;
+.task-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.task-tag {
-  background-color: #a46300; /* สีส้มทอง (เหมือนไอคอน Team ในภาพ) */
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-.task-badge {
-  font-weight: 700;
+.task-btn.edit {
+  background-color: #f0ad4e;
   color: white;
-  padding: 2px 8px;
-  border-radius: 8px;
 }
 
-.status-to-do {
-  background-color: #007bff;
+.task-btn.edit:hover {
+  background-color: #ec971f;
 }
 
-.status-in-progress {
-  background-color: #ffc107;
-  color: #222;
+.task-btn.delete {
+  background-color: #d9534f;
+  color: white;
 }
 
-.status-done {
-  background-color: #28a745;
+.task-btn.delete:hover {
+  background-color: #c9302c;
 }
 
-.status-blocked {
-  background-color: #dc3545;
+.task-btn.save {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.task-btn.save:hover {
+  background-color: #31b0d5;
+}
+
+.task-btn.cancel {
+  background-color: #f7f7f7;
+  color: #555;
+}
+
+.task-btn.cancel:hover {
+  background-color: #e7e7e7;
+}
+
+.task-input {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.task-edit-form {
+  display: flex;
+  flex-direction: column;
 }

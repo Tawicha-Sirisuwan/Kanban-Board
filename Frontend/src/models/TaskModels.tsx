@@ -1,5 +1,5 @@
 export interface Task {
-  id: number;           // ← task_id
+  task_id: number;           // ← task_id
   column_id: number;
   title: string;
   due_date: string;     // ← PostgreSQL date
