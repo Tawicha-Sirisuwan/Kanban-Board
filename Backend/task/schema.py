@@ -14,6 +14,7 @@ class TaskOut(BaseModel):
     title: str
     position: int
     due_date: Optional[datetime] = None
+    creator_name: Optional[str] = None  # ✅ เพิ่ม field นี้เข้าไป
 
     class Config:
         orm_mode = True

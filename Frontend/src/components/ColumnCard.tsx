@@ -7,12 +7,11 @@ import './ColumnCard.css';
 interface ColumnProps {
   columnId: number;
   title: string;
-  color: string;
   tasks: Task[];
-  onUpdate?: () => void; // <-- callback สำหรับ reload
+  onUpdate?: () => void;
 }
 
-const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, color, tasks, onUpdate }) => {
+const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, tasks, onUpdate }) => {
   const [editing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
@@ -66,7 +65,7 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, color, tasks, onUp
   };
 
   return (
-    <div className="column" style={{ backgroundColor: color }}>
+    <div className="column-card">
       <div className="column-header">
         {editing ? (
           <>
@@ -75,21 +74,26 @@ const ColumnCard: React.FC<ColumnProps> = ({ columnId, title, color, tasks, onUp
               onChange={(e) => setNewTitle(e.target.value)}
               className="column-edit-input"
             />
-            <button onClick={handleRename}>บันทึก</button>
-            <button onClick={() => setEditing(false)}>ยกเลิก</button>
+            <button className="column-btn save" onClick={handleRename}>💾</button>
+            <button className="column-btn cancel" onClick={() => setEditing(false)}>❌</button>
           </>
         ) : (
           <>
-            <span>{title}</span>
-            <button onClick={() => setEditing(true)}>✏️</button>
-            <button onClick={handleDelete}>🗑️</button>
+            <h3 className="column-title">{title}</h3>
+            <div className="column-actions">
+              <button className="column-btn add" onClick={() => alert('TODO: เพิ่ม task')} title="เพิ่มการ์ด">＋</button>
+              <button className="column-btn edit" onClick={() => setEditing(true)} title="แก้ไข">✏️</button>
+              <button className="column-btn delete" onClick={handleDelete} title="ลบคอลัมน์">🗑️</button>
+            </div>
           </>
         )}
       </div>
 
-      {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
-      ))}
+      <div className="task-list">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
     </div>
   );
 };

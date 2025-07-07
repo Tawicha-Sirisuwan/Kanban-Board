@@ -49,7 +49,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
       <div className="task-field">
         <span className="task-label">👥 Members</span>
-        <span className="task-value">{task.members ?? '-'}</span>
+        <span className="task-value">{task.creator_name ?? '-'}</span>
       </div>
     </div>
   );

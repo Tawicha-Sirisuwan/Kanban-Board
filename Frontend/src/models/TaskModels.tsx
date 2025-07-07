@@ -5,6 +5,7 @@ export interface Task {
   due_date: string;     // ← PostgreSQL date
   position: number;
   created_by: number;
+  creator_name: string;
 
   // Optional UI fields (default fallback)
   status?: string;

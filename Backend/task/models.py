@@ -17,3 +17,4 @@ class Task(Base):
 
     column = relationship(BoardColumn, back_populates="tasks")
     creator = relationship("user.models.User", back_populates="created_tasks")  # ✅ ใช้ path แทน import
+    

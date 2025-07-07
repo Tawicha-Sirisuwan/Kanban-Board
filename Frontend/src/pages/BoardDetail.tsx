@@ -10,7 +10,6 @@ import type { Task } from '../models/TaskModels';
 interface Column {
   id: number;
   title: string;
-  color: string;
 }
 
 const BoardDetail: React.FC = () => {
@@ -33,7 +32,6 @@ const BoardDetail: React.FC = () => {
       const mapped = data.map((col: any) => ({
         id: col.id ?? col.column_id,
         title: col.title ?? col.name ?? 'Untitled',
-        color: col.color ?? '#1e1e1e',
       }));
       setColumns(mapped);
     } catch (err) {
@@ -81,7 +79,7 @@ const BoardDetail: React.FC = () => {
       <Navbar />
 
       <div className="board-detail-header">
-        <h2>รายละเอียดบอร์ด #{boardId}</h2>
+        <h2 className="board-detail-header">รายละเอียดบอร์ด #{boardId}</h2>
         <button
           className="board-detail-add-column-btn"
           onClick={() => setShowModal(true)}
@@ -96,7 +94,6 @@ const BoardDetail: React.FC = () => {
             key={col.id}
             columnId={col.id}
             title={col.title}
-            color={col.color}
             tasks={tasks.filter((task) => task.column_id === col.id)}
             onUpdate={fetchColumns}
           />
