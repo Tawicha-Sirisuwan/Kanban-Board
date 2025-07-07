@@ -15,7 +15,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskUpdated, onTaskDeleted 
   const [updatedDueDate, setUpdatedDueDate] = useState(task.due_date ?? '');
   const [loading, setLoading] = useState(false);
 
-  // แปลงวันที่ในรูปแบบ 'YYYY-MM-DD'
+ 
   const formatDate = (dateStr: string | undefined) => {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
@@ -26,7 +26,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskUpdated, onTaskDeleted 
     });
   };
 
-  // ฟังก์ชันสำหรับอัปเดต Task
+  
   const handleUpdateTask = async () => {
     const formattedDueDate = updatedDueDate ? new Date(updatedDueDate).toISOString().split('T')[0] : null;
 
@@ -36,6 +36,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskUpdated, onTaskDeleted 
       position: task.position,
       title: updatedTitle,
       due_date: formattedDueDate,
+      creator_name: task.creator_name 
     };
 
     setLoading(true);
@@ -73,7 +74,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onTaskUpdated, onTaskDeleted 
     }
   };
 
-  // ฟังก์ชันสำหรับลบ Task
+ 
   const handleDeleteTask = async () => {
     if (window.confirm('คุณต้องการลบ Task นี้หรือไม่?')) {
       setLoading(true);
