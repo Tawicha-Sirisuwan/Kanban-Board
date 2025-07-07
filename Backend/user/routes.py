@@ -5,6 +5,7 @@ from database.connection import SessionLocal
 from user.models import User 
 from user.schema import UserCreate 
 from user.auth import create_access_token, get_current_user
+from user.password_utils import hash_password, verify_password  # ✅ import ที่เพิ่ม
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -20,25 +21,30 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/users")    #register
+@router.post("/users")  # ✅ REGISTER
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    hashed_pw = hash_password(user.password)  # ✅ hash password
     new_user = User(
         username=user.username,
         email=user.email,
-        password=user.password
+        password=hashed_pw
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    return {
+        "user_id": new_user.user_id,
+        "username": new_user.username,
+        "email": new_user.email
+    }
 
-@router.post("/login")   #login
+@router.post("/login")  # ✅ LOGIN
 def login_user(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(
         or_(User.username == request.identifier, User.email == request.identifier)
     ).first()
 
-    if not user or user.password != request.password:
+    if not user or not verify_password(request.password, user.password):  # ✅ verify hash
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_access_token(data={"sub": str(user.user_id)})
