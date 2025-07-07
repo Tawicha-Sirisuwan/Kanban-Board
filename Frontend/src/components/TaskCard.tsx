@@ -21,16 +21,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
     <div className="task-card">
       <h3 className="task-title">{task.title}</h3>
 
-      <div className="task-field">
-        <span className="task-label">✨ Status</span>
-        <span
-          className={`task-badge status-${(task.status ?? 'To Do')
-            .toLowerCase()
-            .replace(/\s/g, '-')}`}
-        >
-          {task.status ?? 'To Do'}
-        </span>
-      </div>
 
       <div className="task-field">
         <span className="task-label">🙋‍♀️ Assign</span>

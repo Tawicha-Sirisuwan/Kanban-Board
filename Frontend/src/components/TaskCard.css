@@ -1,62 +1,71 @@
 .task-card {
-  background: #1c1c1c;
-  color: white;
+  background-color: #1b8080; 
+  border-radius: 12px;
   padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  color: white; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: transform 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-4px);
 }
 
 .task-title {
-  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #fff;
 }
 
 .task-field {
   display: flex;
-  gap: 8px;
-  margin-bottom: 6px;
-  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
 }
 
 .task-label {
-  width: 80px;
-  color: #aaa;
-  font-size: 14px;
+  color: #d3d3d3; /* สีเทาอ่อน */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.task-value {
-  font-size: 14px;
+.task-value,
+.task-tag {
+  font-weight: 600;
+  color: #fff;
 }
 
 .task-tag {
-  background-color: #864c24;
-  color: white;
+  background-color: #a46300; /* สีส้มทอง (เหมือนไอคอน Team ในภาพ) */
   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 13px;
+  border-radius: 6px;
 }
 
 .task-badge {
+  font-weight: 700;
+  color: white;
   padding: 2px 8px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: bold;
+  border-radius: 8px;
 }
 
-.status-testing {
-  background-color: #b04191;
-  color: white;
+.status-to-do {
+  background-color: #007bff;
 }
+
+.status-in-progress {
+  background-color: #ffc107;
+  color: #222;
+}
+
 .status-done {
-  background-color: #228b22;
+  background-color: #28a745;
 }
-.status-in-development {
-  background-color: #2980b9;
-}
-.status-not-started {
-  background-color: #7f8c8d;
-}
-.status-reviewing {
-  background-color: #9b59b6;
+
+.status-blocked {
+  background-color: #dc3545;
 }
