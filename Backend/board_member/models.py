@@ -1,6 +1,8 @@
+# models.py
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from database.connection import Base
+from user.models import User  # เชื่อมกับ User model
 
 class BoardMember(Base):
     __tablename__ = "board_members"
@@ -11,4 +13,4 @@ class BoardMember(Base):
     role = Column(String)
 
     board = relationship("Board", back_populates="members")
-    user = relationship("User", back_populates="board_memberships")
+    user = relationship("User", back_populates="board_memberships")  # เชื่อมโยงกับ User model

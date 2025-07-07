@@ -1,0 +1,101 @@
+/* CSS สำหรับ Modal เพิ่ม Task */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* ใช้สีดำทึบขึ้นเล็กน้อย */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out; /* เพิ่มแอนิเมชั่นให้การแสดง Modal */
+}
+
+.modal-content {
+  background-color: #341a1a;
+  padding: 20px;
+  border-radius: 12px; /* ทำมุมให้กลมขึ้น */
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ดูนุ่มนวล */
+  animation: slideIn 0.4s ease-in-out; /* แอนิเมชั่นในการเลื่อน Modal เข้ามา */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  border-radius: 8px; /* มุมโค้งมากขึ้น */
+  cursor: pointer;
+  font-weight: bold; /* ขีดตัวหนาสำหรับปุ่ม */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* เพิ่ม transition ให้สวยขึ้น */
+}
+
+.modal-actions button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+  transform: scale(1); /* เมื่อปุ่มถูกปิดไม่ให้ทำการเปลี่ยนขนาด */
+}
+
+.modal-actions button:nth-child(1) {
+  background-color: #28a745; /* เขียว */
+  color: white;
+}
+
+.modal-actions button:nth-child(1):hover {
+  background-color: #218838; /* สีเขียวเข้มขึ้นเมื่อ hover */
+  transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
+}
+
+.modal-actions button:nth-child(2) {
+  background-color: #dc3545; /* แดง */
+  color: white;
+}
+
+.modal-actions button:nth-child(2):hover {
+  background-color: #c82333; /* สีแดงเข้มขึ้นเมื่อ hover */
+  transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #007bff; /* สีฟ้าสำหรับขอบเมื่อ focus */
+  outline: none;
+}
+
+textarea {
+  height: 120px; /* เพิ่มความสูงให้ textarea */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px); /* เลื่อนขึ้นจากข้างล่าง */
+  }
+  to {
+    transform: translateY(0);
+  }
+}

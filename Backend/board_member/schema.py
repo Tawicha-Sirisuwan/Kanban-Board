@@ -9,8 +9,13 @@ class BoardMemberBase(BaseModel):
 class BoardMemberCreate(BoardMemberBase):
     pass
 
-class BoardMemberOut(BoardMemberBase):
+class BoardMemberOut(BaseModel):
     id: int
+    board_id: int
+    user_id: int
+    role: str
+    username: str  # เพิ่มข้อมูล username
+    email: str  # เพิ่มข้อมูล email
 
     class Config:
         orm_mode = True

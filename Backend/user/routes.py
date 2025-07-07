@@ -50,6 +50,17 @@ def login_user(request: LoginRequest, db: Session = Depends(get_db)):
         "email": user.email
     }
 
+@router.get("/users")
+def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    users = db.query(User).all()
+    return [
+        {
+            "user_id": u.user_id,
+            "username": u.username,
+            "email": u.email
+        } for u in users
+    ]
+
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):
     return {

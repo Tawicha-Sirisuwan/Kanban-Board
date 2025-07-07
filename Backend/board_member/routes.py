@@ -54,7 +54,7 @@ def get_board_members(
 
     return db.query(BoardMember).filter(BoardMember.board_id == board_id).all()
 
-# ELETE /board-members/{id} — ลบสมาชิก
+
 @router.delete("/board-members/{id}")
 def delete_board_member(
     id: int,
