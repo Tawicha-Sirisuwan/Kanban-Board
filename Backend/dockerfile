@@ -1,0 +1,29 @@
+# ใช้ Python official image
+FROM python:3.10-slim
+
+# ตั้ง working directory ใน container
+WORKDIR /app
+
+# ติดตั้งระบบ package management และ dependencies ที่จำเป็น
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc python3-dev libpq-dev && \
+    rm -rf /var/lib/apt/lists/*  # ลบ cache หลังจากติดตั้ง
+
+# คัดลอกไฟล์ requirements.txt ก่อน (เพื่อใช้ประโยชน์จาก Docker layer caching)
+COPY requirements.txt .
+
+# ติดตั้ง Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# คัดลอกไฟล์และโฟลเดอร์ทั้งหมด (ยกเว้นสิ่งที่ระบุใน .dockerignore)
+COPY . .
+
+# ตั้งค่า environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+# เปิดพอร์ตที่ FastAPI ใช้
+EXPOSE 8000
+
+# คำสั่งเริ่มต้นเซิร์ฟเวอร์ (ปรับตามโครงสร้างโปรเจคของคุณ)
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
