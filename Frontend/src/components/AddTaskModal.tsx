@@ -7,12 +7,11 @@ import './AddTaskModal.css';
 interface AddTaskModalProps {
   columnId: number;
   onClose: () => void;
-  onTaskAdded: (task: Task) => void;  // คาดหวังว่า onTaskAdded จะรับ Task ที่ถูกเพิ่ม
+  onTaskAdded: (task: Task) => void;  
 }
 
 const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAdded }) => {
   const [taskTitle, setTaskTitle] = useState('');
-  const [taskAssignee, setTaskAssignee] = useState('');
   const [taskDueDate, setTaskDueDate] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -33,15 +32,15 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAd
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-        column_id: columnId, // ตรวจสอบว่าค่า column_id ถูกต้อง
+        column_id: columnId, 
         title: taskTitle,
-        due_date: taskDueDate, // ตรวจสอบว่ามีค่าที่ถูกต้อง
+        due_date: taskDueDate, 
         position: 0, 
       }),
       });
 
       if (res.ok) {
-        const newTask = await res.json();  // รับข้อมูล Task ที่ถูกสร้าง
+        const newTask = await res.json();  
         onTaskAdded(newTask);  
         onClose();  
       } else {
@@ -66,12 +65,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ columnId, onClose, onTaskAd
           onChange={(e) => setTaskTitle(e.target.value)}
         />
         <input
-          type="text"
-          placeholder="ผู้มอบหมาย"
-          value={taskAssignee}
-          onChange={(e) => setTaskAssignee(e.target.value)}
-        />
-        <input
+          className='due-date-input'
           type="date"
           value={taskDueDate}
           onChange={(e) => setTaskDueDate(e.target.value)}
